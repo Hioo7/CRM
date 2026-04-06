@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EMPLOYEE
+}
+
+enum AccessType {
+  READ_ONLY
+  READ_WRITE
+}
+
+model Employee {
+  id               String           @id @default(cuid())
+  username         String           @unique
+  email            String           @unique
+  password         String
+  role             Role             @default(EMPLOYEE)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  customers        Customer[]
+  customerAccesses CustomerAccess[]
+}
+
+model Customer {
+  id               String           @id @default(cuid())
+  firstName        String?
+  lastName         String?
+  email            String?          @unique
+  phone            String?
+  address          String?
+  city             String?
+  state            String?
+  country          String?
+  zipCode          String?
+  company          String?
+  notes            String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  createdById      String
+  createdBy        Employee         @relation(fields: [createdById], references: [id])
+  customerAccesses CustomerAccess[]
+}
+
+model CustomerAccess {
+  id         String     @id @default(cuid())
+  customerId String
+  employeeId String
+  accessType AccessType
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  customer   Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  employee   Employee   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, employeeId])
+}

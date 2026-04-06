@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: emerald --default;
+}
+
+@layer base {
+  body {
+    background:
+      radial-gradient(circle at top, rgba(167, 243, 208, 0.24), transparent 32%),
+      linear-gradient(180deg, #f6f1e8 0%, #f2ede4 52%, #eee7db 100%);
+    color: #1f2937;
+  }
+}
+
+@layer components {
+  .dashboard-shell {
+    @apply min-h-screen;
+    background:
+      radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 26%),
+      radial-gradient(circle at top left, rgba(251, 191, 36, 0.08), transparent 22%);
+  }
+
+  .dashboard-panel {
+    @apply rounded-[2rem] border border-white/70 bg-base-100/90 shadow-[0_24px_80px_rgba(120,98,70,0.12)] backdrop-blur;
+  }
+
+  .dashboard-card {
+    @apply rounded-[1.75rem] border border-white/80 bg-base-100/95 shadow-[0_16px_45px_rgba(120,98,70,0.12)];
+  }
+
+  .auth-shell {
+    @apply min-h-screen;
+    background:
+      radial-gradient(circle at top left, rgba(16, 185, 129, 0.15), transparent 26%),
+      radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.1), transparent 28%),
+      linear-gradient(180deg, #f5efe5 0%, #f1eadf 50%, #ece5da 100%);
+  }
+
+  .auth-panel {
+    @apply rounded-[2rem] border border-white/80 bg-base-100/92 shadow-[0_24px_80px_rgba(120,98,70,0.14)] backdrop-blur;
+  }
+
+  .auth-input {
+    @apply input h-12 rounded-2xl border-stone-200 bg-stone-50/70 text-slate-900 shadow-none;
+  }
+
+  .dashboard-section-title {
+    @apply text-2xl font-semibold tracking-tight text-slate-900;
+  }
+
+  .dashboard-section-copy {
+    @apply text-sm leading-6 text-slate-600;
+  }
+
+  .dashboard-kicker {
+    @apply text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-emerald-700/80;
+  }
+}

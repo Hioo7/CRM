@@ -1,0 +1,10 @@
+node_modules/
+dist/
+
+# Environment files — only template is committed
+.env.local
+.env.prod
+
+# OS
+.DS_Store
+Thumbs.db
