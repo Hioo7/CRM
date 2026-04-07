@@ -17,16 +17,33 @@ enum AccessType {
   READ_WRITE
 }
 
+enum OpportunityStage {
+  LEAD
+  QUALIFIED_LEAD
+  NEEDS_ANALYSIS
+  PROPOSAL_DEMO
+  NEGOTIATION
+  CLOSED_WON
+  ONBOARDING
+  ACTIVE_RETENTION
+  CHURNED_CLOSED_LOST
+}
+
 model Employee {
-  id               String           @id @default(cuid())
-  username         String           @unique
-  email            String           @unique
-  password         String
-  role             Role             @default(EMPLOYEE)
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  customers        Customer[]
-  customerAccesses CustomerAccess[]
+  id                  String                    @id @default(cuid())
+  username            String                    @unique
+  email               String                    @unique
+  password            String
+  role                Role                      @default(EMPLOYEE)
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+  customers           Customer[]
+  customerAccesses    CustomerAccess[]
+  opportunities       Opportunity[]             @relation("OpportunityCreator")
+  stageChanges        OpportunityStageHistory[] @relation("StageChangedBy")
+  noteEdits           OpportunityNoteEdit[]     @relation("NoteEditedBy")
+  opportunityAccesses OpportunityAccess[]
+  reminders           Reminder[]
 }
 
 model Customer {
@@ -35,6 +52,8 @@ model Customer {
   lastName         String?
   email            String?          @unique
   phone            String?
+  instagramHandle  String?
+  linkedinProfileUrl String?
   address          String?
   city             String?
   state            String?
@@ -47,6 +66,7 @@ model Customer {
   createdById      String
   createdBy        Employee         @relation(fields: [createdById], references: [id])
   customerAccesses CustomerAccess[]
+  opportunities    Opportunity[]
 }
 
 model CustomerAccess {
@@ -60,4 +80,71 @@ model CustomerAccess {
   employee   Employee   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
   @@unique([customerId, employeeId])
+}
+
+model Opportunity {
+  id           String           @id @default(cuid())
+  name         String
+  customerId   String
+  createdById  String
+  stage        OpportunityStage @default(LEAD)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  customer     Customer                  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  createdBy    Employee                  @relation("OpportunityCreator", fields: [createdById], references: [id])
+  stageHistory OpportunityStageHistory[]
+  accesses     OpportunityAccess[]
+  reminders    Reminder[]
+}
+
+model OpportunityStageHistory {
+  id            String            @id @default(cuid())
+  opportunityId String
+  fromStage     OpportunityStage?
+  toStage       OpportunityStage
+  notes         String?
+  changedById   String
+  changedAt     DateTime          @default(now())
+  opportunity   Opportunity           @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  changedBy     Employee              @relation("StageChangedBy", fields: [changedById], references: [id])
+  noteEdits     OpportunityNoteEdit[]
+}
+
+model OpportunityNoteEdit {
+  id             String   @id @default(cuid())
+  stageHistoryId String
+  previousNotes  String?
+  newNotes       String?
+  editedById     String
+  editedAt       DateTime @default(now())
+  stageHistory   OpportunityStageHistory @relation(fields: [stageHistoryId], references: [id], onDelete: Cascade)
+  editedBy       Employee                @relation("NoteEditedBy", fields: [editedById], references: [id])
+}
+
+model OpportunityAccess {
+  id            String     @id @default(cuid())
+  opportunityId String
+  employeeId    String
+  accessType    AccessType
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  employee      Employee    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([opportunityId, employeeId])
+}
+
+model Reminder {
+  id            String      @id @default(cuid())
+  opportunityId String
+  employeeId    String
+  description   String
+  eventAt       DateTime
+  notifyBefore  Int
+  completed     Boolean     @default(false)
+  completedAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  employee      Employee    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }

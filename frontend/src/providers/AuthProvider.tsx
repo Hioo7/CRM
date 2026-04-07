@@ -32,10 +32,11 @@ function hydrateFromStorage(): AuthState {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [state, setState] = useState<AuthState>(hydrateFromStorage);
 
-  const login = useCallback(async (payload: LoginPayload): Promise<void> => {
+  const login = useCallback(async (payload: LoginPayload) => {
     const response = await authService.login(payload);
     localStorage.setItem(AUTH_TOKEN_KEY, response.token);
     setState({ employee: response.employee, token: response.token, isLoading: false });
+    return response.employee;
   }, []);
 
   const logout = useCallback((): void => {

@@ -177,7 +177,7 @@ function ChangePasswordModal({ isOpen, onClose, onSubmit }: ChangePasswordModalP
             <p className="dashboard-kicker text-amber-700/80">Security</p>
             <h3 className="mt-2 text-lg font-semibold text-slate-900">Change password</h3>
             <p className="mt-1 text-sm leading-6 text-slate-600">
-              Rotate your password to keep this admin workspace secure.
+              Rotate your password to keep your account secure.
             </p>
           </div>
         </div>
@@ -277,7 +277,7 @@ export function ProfilePage() {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Summary</p>
               <h3 className="mt-3 text-2xl font-semibold text-slate-900">{profile.username}</h3>
               <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
-                This protected workspace belongs to the currently signed-in administrator.
+                Manage your account details and credentials.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
@@ -348,7 +348,7 @@ export function ProfilePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-600/80">Session</p>
             <h3 className="mt-2 text-lg font-semibold text-slate-900">Log out</h3>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              End the current admin session on this device when you are done managing the workspace.
+              End your current session on this device when you are done.
             </p>
           </div>
           <button

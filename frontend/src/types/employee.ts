@@ -1,16 +1,16 @@
-import type { Employee, Role } from '@/types/auth';
+import type { Employee, Role } from "@/utils/auth";
 
 export interface CreateEmployeePayload {
   username: string;
   email: string;
   password: string;
-  role: 'ADMIN' | 'EMPLOYEE';
+  role: "ADMIN" | "EMPLOYEE";
 }
 
 export interface UpdateEmployeePayload {
   email?: string;
   password?: string;
-  role?: 'ADMIN' | 'EMPLOYEE';
+  role?: "ADMIN" | "EMPLOYEE";
 }
 
 export interface UpdateSelfPayload {
@@ -24,7 +24,7 @@ export interface EmployeeDashboardRow {
   canDelete: boolean;
   lockReason: string | null;
   roleLabel: string;
-  roleTone: 'primary' | 'secondary' | 'neutral';
+  roleTone: "primary" | "secondary" | "neutral";
 }
 
 export interface EmployeeActor {

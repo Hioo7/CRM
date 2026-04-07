@@ -8,7 +8,7 @@ export interface AuthState {
 }
 
 export interface AuthContextValue extends AuthState {
-  login: (payload: LoginPayload) => Promise<void>;
+  login: (payload: LoginPayload) => Promise<AuthEmployee>;
   logout: () => void;
 }
 

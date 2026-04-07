@@ -4,6 +4,7 @@ import { CreateCustomerDto, UpdateCustomerDto } from '../schema/customer.schema'
 import { GrantCustomerAccessDto } from '../schema/customer-access.schema';
 
 type IdParam = { id: string };
+type AccessParam = { id: string; employeeId: string };
 
 export class CustomerController {
   private static instance: CustomerController;
@@ -72,6 +73,15 @@ export class CustomerController {
       const dto = req.body as GrantCustomerAccessDto;
       const access = await CustomerService.getInstance().grantAccess(req.params.id, dto);
       res.status(201).json(access);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  revokeAccess = async (req: Request<AccessParam>, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      await CustomerService.getInstance().revokeAccess(req.params.id, req.params.employeeId);
+      res.status(204).send();
     } catch (error) {
       next(error);
     }

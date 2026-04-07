@@ -17,5 +17,6 @@ router.get('/:id', authenticate, checkCustomerAccess(AccessType.READ_ONLY), cont
 router.patch('/:id', authenticate, checkCustomerAccess(AccessType.READ_WRITE), validateUpdateCustomer, controller.update);
 router.delete('/:id', authenticate, authorize(Role.ADMIN, Role.SUPER_ADMIN), controller.delete);
 router.post('/:id/access', authenticate, checkCustomerAccess(AccessType.READ_WRITE), validateGrantCustomerAccess, controller.grantAccess);
+router.delete('/:id/access/:employeeId', authenticate, checkCustomerAccess(AccessType.READ_WRITE), controller.revokeAccess);
 
 export default router;

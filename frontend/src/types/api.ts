@@ -1,3 +1,1 @@
-export interface ApiError {
-  message: string;
-}
+export type { ApiError } from '@/api';

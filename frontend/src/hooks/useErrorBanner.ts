@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { ERROR_DISPLAY_DURATION_MS } from '@/config/constants';
 
 export interface ErrorBannerState {
@@ -11,28 +11,28 @@ export function useErrorBanner(): ErrorBannerState {
   const [error, setError] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const clearTimer = () => {
+  const clearTimer = useCallback((): void => {
     if (timerRef.current !== null) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
-  };
+  }, []);
 
-  const showError = (message: string): void => {
+  const showError = useCallback((message: string): void => {
     clearTimer();
     setError(message);
     timerRef.current = setTimeout(() => {
       setError(null);
       timerRef.current = null;
     }, ERROR_DISPLAY_DURATION_MS);
-  };
+  }, [clearTimer]);
 
-  const clearError = (): void => {
+  const clearError = useCallback((): void => {
     clearTimer();
     setError(null);
-  };
+  }, [clearTimer]);
 
-  useEffect(() => clearTimer, []);
+  useEffect(() => clearTimer, [clearTimer]);
 
   return { error, showError, clearError };
 }

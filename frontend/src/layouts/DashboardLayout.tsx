@@ -1,6 +1,12 @@
 import { Outlet } from 'react-router-dom';
+import { HiOutlineUserCircle, HiOutlineUsers } from 'react-icons/hi2';
 import { EmployeeProvider } from '@/providers/EmployeeProvider';
 import { DashboardBottomNav } from '@/components/navigation/DashboardBottomNav';
+
+const SUPER_ADMIN_NAV = [
+  { label: 'Users', to: '/super-admin/dashboard/users', icon: HiOutlineUsers },
+  { label: 'Profile', to: '/super-admin/dashboard/profile', icon: HiOutlineUserCircle },
+];
 
 export function DashboardLayout() {
   return (
@@ -23,7 +29,7 @@ export function DashboardLayout() {
             <Outlet />
           </main>
 
-          <DashboardBottomNav />
+          <DashboardBottomNav navItems={SUPER_ADMIN_NAV} />
         </div>
       </div>
     </EmployeeProvider>
