@@ -1,9 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
-import { OpportunityService } from '../services/OpportunityService';
-import { CreateOpportunityDto, UpdateOpportunityDto } from '../schema/opportunity.schema';
-import { StageChangeDto } from '../schema/opportunity-stage.schema';
-import { NoteEditDto } from '../schema/opportunity-note.schema';
-import { GrantOpportunityAccessDto } from '../schema/opportunity-access.schema';
+import { Request, Response, NextFunction } from "express";
+import { OpportunityService } from "../services/OpportunityService";
+import {
+  CreateOpportunityDto,
+  UpdateOpportunityDto,
+} from "../schema/opportunity.schema";
+import { StageChangeDto } from "../schema/opportunity-stage.schema";
+import { NoteEditDto } from "../schema/opportunity-note.schema";
+import { GrantOpportunityAccessDto } from "../schema/opportunity-access.schema";
 
 type IdParam = { id: string };
 type HistoryParam = { id: string; historyId: string };
@@ -21,7 +24,11 @@ export class OpportunityController {
     return OpportunityController.instance;
   }
 
-  create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  create = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
       const dto = req.body as CreateOpportunityDto;
       const opportunity = await OpportunityService.getInstance().create(
@@ -35,13 +42,19 @@ export class OpportunityController {
     }
   };
 
-  list = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  list = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
       const customerId = req.query.customerId as string | undefined;
+      const createdById = req.query.createdById as string | undefined;
       const opportunities = await OpportunityService.getInstance().findAll(
         req.employee.id,
         req.employee.role,
         customerId,
+        createdById,
       );
       res.status(200).json(opportunities);
     } catch (error) {
@@ -49,26 +62,43 @@ export class OpportunityController {
     }
   };
 
-  getById = async (req: Request<IdParam>, res: Response, next: NextFunction): Promise<void> => {
+  getById = async (
+    req: Request<IdParam>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
-      const opportunity = await OpportunityService.getInstance().findById(req.params.id);
+      const opportunity = await OpportunityService.getInstance().findById(
+        req.params.id,
+      );
       res.status(200).json(opportunity);
     } catch (error) {
       next(error);
     }
   };
 
-  update = async (req: Request<IdParam>, res: Response, next: NextFunction): Promise<void> => {
+  update = async (
+    req: Request<IdParam>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
       const dto = req.body as UpdateOpportunityDto;
-      const opportunity = await OpportunityService.getInstance().update(req.params.id, dto);
+      const opportunity = await OpportunityService.getInstance().update(
+        req.params.id,
+        dto,
+      );
       res.status(200).json(opportunity);
     } catch (error) {
       next(error);
     }
   };
 
-  delete = async (req: Request<IdParam>, res: Response, next: NextFunction): Promise<void> => {
+  delete = async (
+    req: Request<IdParam>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
       await OpportunityService.getInstance().delete(req.params.id);
       res.status(204).send();
@@ -121,7 +151,10 @@ export class OpportunityController {
   ): Promise<void> => {
     try {
       const dto = req.body as GrantOpportunityAccessDto;
-      const access = await OpportunityService.getInstance().grantAccess(req.params.id, dto);
+      const access = await OpportunityService.getInstance().grantAccess(
+        req.params.id,
+        dto,
+      );
       res.status(201).json(access);
     } catch (error) {
       next(error);
@@ -134,7 +167,10 @@ export class OpportunityController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      await OpportunityService.getInstance().revokeAccess(req.params.id, req.params.employeeId);
+      await OpportunityService.getInstance().revokeAccess(
+        req.params.id,
+        req.params.employeeId,
+      );
       res.status(204).send();
     } catch (error) {
       next(error);

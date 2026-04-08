@@ -70,6 +70,10 @@ export function OpportunityDetailPage() {
       return { accessLabel: 'View Only', canWrite: false };
     }
 
+    if (employee.role === 'ADMIN' || employee.role === 'SUPER_ADMIN') {
+      return { accessLabel: 'Admin', canWrite: true };
+    }
+
     if (selectedOpportunity.createdById === employee.id) {
       return { accessLabel: 'Owner', canWrite: true };
     }
@@ -94,6 +98,8 @@ export function OpportunityDetailPage() {
   }
 
   const opportunity = selectedOpportunity;
+  const isAdminUser = employee.role === 'ADMIN' || employee.role === 'SUPER_ADMIN';
+  const opportunitiesBasePath = isAdminUser ? '/admin/dashboard/opportunities' : '/employee/dashboard/opportunities';
   const customerLabel = getCustomerLabel(
     opportunity.customer.firstName,
     opportunity.customer.lastName,
@@ -123,7 +129,7 @@ export function OpportunityDetailPage() {
           <div className="flex items-start gap-3">
             <button
               className="btn btn-sm mt-0.5 rounded-2xl border border-stone-200 bg-white text-slate-700 shadow-none hover:bg-stone-50"
-              onClick={() => navigate('/employee/dashboard/opportunities')}
+              onClick={() => navigate(opportunitiesBasePath)}
               aria-label="Back to opportunities"
             >
               <HiOutlineArrowLeft className="h-4 w-4" />

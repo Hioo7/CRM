@@ -41,6 +41,18 @@
     @apply rounded-[2rem] border border-white/80 bg-base-100/92 shadow-[0_24px_80px_rgba(120,98,70,0.14)] backdrop-blur;
   }
 
+  .landing-shell {
+    @apply min-h-screen;
+    background:
+      radial-gradient(circle at top left, rgba(16, 185, 129, 0.14), transparent 24%),
+      radial-gradient(circle at top right, rgba(251, 191, 36, 0.12), transparent 24%),
+      linear-gradient(180deg, #f5efe5 0%, #f0e9dd 54%, #ece4d8 100%);
+  }
+
+  .landing-panel {
+    @apply rounded-[2rem] border border-white/80 bg-base-100/92 shadow-[0_24px_80px_rgba(120,98,70,0.14)] backdrop-blur;
+  }
+
   .auth-input {
     @apply input h-12 rounded-2xl border-stone-200 bg-stone-50/70 text-slate-900 shadow-none;
   }

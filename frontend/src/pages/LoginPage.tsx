@@ -58,10 +58,12 @@ export function LoginPage() {
     setIsSubmitting(true);
     try {
       const employee = await login(form);
-      const destination =
-        employee.role === "SUPER_ADMIN"
-          ? "/super-admin/dashboard/users"
-          : "/employee/dashboard/leads";
+      const ROLE_DESTINATIONS: Record<string, string> = {
+        SUPER_ADMIN: '/super-admin/dashboard/users',
+        ADMIN: '/admin/dashboard/overview',
+        EMPLOYEE: '/employee/dashboard/leads',
+      };
+      const destination = ROLE_DESTINATIONS[employee.role] ?? '/login';
       navigate(destination, { replace: true });
     } catch (err) {
       showError(extractApiErrorMessage(err as Error));

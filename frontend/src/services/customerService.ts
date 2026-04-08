@@ -9,8 +9,10 @@ import type {
 } from '@/types/customer';
 
 export const customerService = {
-  async list(): Promise<CustomerListItem[]> {
-    const { data } = await httpClient.get<CustomerListItem[]>('/customers');
+  async list(createdById?: string): Promise<CustomerListItem[]> {
+    const { data } = await httpClient.get<CustomerListItem[]>('/customers', {
+      params: createdById ? { createdById } : undefined,
+    });
     return data;
   },
 

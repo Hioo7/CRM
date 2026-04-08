@@ -29,6 +29,15 @@ enum OpportunityStage {
   CHURNED_CLOSED_LOST
 }
 
+enum SocialPlatform {
+  WHATSAPP
+  INSTAGRAM
+  LINKEDIN
+  X
+  FACEBOOK
+  SMS
+}
+
 model Employee {
   id                  String                    @id @default(cuid())
   username            String                    @unique
@@ -44,6 +53,7 @@ model Employee {
   noteEdits           OpportunityNoteEdit[]     @relation("NoteEditedBy")
   opportunityAccesses OpportunityAccess[]
   reminders           Reminder[]
+  quickMessageTemplates QuickMessageTemplate[]
 }
 
 model Customer {
@@ -147,4 +157,15 @@ model Reminder {
   updatedAt     DateTime    @updatedAt
   opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   employee      Employee    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+}
+
+model QuickMessageTemplate {
+  id          String         @id @default(cuid())
+  name        String
+  platform    SocialPlatform
+  content     String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  createdById String
+  createdBy   Employee       @relation(fields: [createdById], references: [id], onDelete: Cascade)
 }

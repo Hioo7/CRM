@@ -90,6 +90,7 @@ export function LeadsPage() {
               key={customer.id}
               customer={customer}
               currentEmployeeId={employee.id}
+              detailBasePath="/employee/dashboard/leads"
             />
           ))}
         </div>

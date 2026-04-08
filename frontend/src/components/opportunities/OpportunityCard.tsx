@@ -2,10 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2';
 import { ACCESS_TYPE_LABELS, OPPORTUNITY_STAGE_LABELS } from '@/config/constants';
 import type { OpportunityListItem } from '@/types/opportunity';
+import type { Role } from '@/types/auth';
 
 interface OpportunityCardProps {
   opportunity: OpportunityListItem;
   currentEmployeeId: string;
+  detailBasePath: string;
+  viewerRole?: Role;
 }
 
 function getCustomerLabel(opportunity: OpportunityListItem): string {
@@ -25,7 +28,11 @@ function getCustomerLabel(opportunity: OpportunityListItem): string {
   return fullName || 'Unnamed customer';
 }
 
-function getAccessTone(opportunity: OpportunityListItem, currentEmployeeId: string): string {
+function getAccessTone(opportunity: OpportunityListItem, currentEmployeeId: string, viewerRole?: Role): string {
+  if (viewerRole === 'ADMIN' || viewerRole === 'SUPER_ADMIN') {
+    return 'border-sky-200 bg-sky-50 text-sky-800';
+  }
+
   if (opportunity.createdById === currentEmployeeId) {
     return 'border-emerald-200 bg-emerald-50 text-emerald-800';
   }
@@ -38,7 +45,11 @@ function getAccessTone(opportunity: OpportunityListItem, currentEmployeeId: stri
   return 'border-stone-200 bg-stone-100 text-slate-700';
 }
 
-function getAccessLabel(opportunity: OpportunityListItem, currentEmployeeId: string): string {
+function getAccessLabel(opportunity: OpportunityListItem, currentEmployeeId: string, viewerRole?: Role): string {
+  if (viewerRole === 'ADMIN' || viewerRole === 'SUPER_ADMIN') {
+    return 'Admin Access';
+  }
+
   if (opportunity.createdById === currentEmployeeId) {
     return 'Owner';
   }
@@ -63,15 +74,15 @@ function getStageTone(stage: OpportunityListItem['stage']): string {
   }
 }
 
-export function OpportunityCard({ opportunity, currentEmployeeId }: OpportunityCardProps) {
+export function OpportunityCard({ opportunity, currentEmployeeId, detailBasePath, viewerRole }: OpportunityCardProps) {
   const navigate = useNavigate();
 
   const handleOpen = (): void => {
-    navigate(`/employee/dashboard/opportunities/${opportunity.id}`);
+    navigate(`${detailBasePath}/${opportunity.id}`);
   };
 
   const customerLabel = getCustomerLabel(opportunity);
-  const accessLabel = getAccessLabel(opportunity, currentEmployeeId);
+  const accessLabel = getAccessLabel(opportunity, currentEmployeeId, viewerRole);
 
   return (
     <button
@@ -88,7 +99,7 @@ export function OpportunityCard({ opportunity, currentEmployeeId }: OpportunityC
           </p>
         </div>
         <span
-          className={`inline-flex shrink-0 rounded-full border px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] md:px-3 md:text-[0.68rem] ${getAccessTone(opportunity, currentEmployeeId)}`}
+          className={`inline-flex shrink-0 rounded-full border px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] md:px-3 md:text-[0.68rem] ${getAccessTone(opportunity, currentEmployeeId, viewerRole)}`}
         >
           {accessLabel}
         </span>

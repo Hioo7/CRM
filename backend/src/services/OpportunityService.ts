@@ -109,19 +109,23 @@ export class OpportunityService {
     employeeId: string,
     role: Role,
     customerId?: string,
+    createdById?: string,
   ): Promise<OpportunityListItem[]> {
-    const customerFilter = customerId ? { customerId } : {};
+    const baseFilter = {
+      ...(customerId ? { customerId } : {}),
+      ...(createdById ? { createdById } : {}),
+    };
 
     if (role === Role.ADMIN || role === Role.SUPER_ADMIN) {
       return prisma.opportunity.findMany({
-        where: customerFilter,
+        where: Object.keys(baseFilter).length > 0 ? baseFilter : undefined,
         orderBy: { createdAt: 'desc' },
         include: opportunityListInclude,
       });
     }
 
     return prisma.opportunity.findMany({
-      where: { ...customerFilter, accesses: { some: { employeeId } } },
+      where: { ...baseFilter, accesses: { some: { employeeId } } },
       orderBy: { createdAt: 'desc' },
       include: opportunityListInclude,
     });

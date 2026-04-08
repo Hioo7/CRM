@@ -145,6 +145,7 @@ export function OpportunitiesPage() {
               key={opportunity.id}
               opportunity={opportunity}
               currentEmployeeId={employee.id}
+              detailBasePath="/employee/dashboard/opportunities"
             />
           ))}
         </div>

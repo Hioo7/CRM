@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    env_file:
+      - ${ENV_FILE:-.env.prod}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: >-
+      sh -c "npx prisma generate
+      && npm run db:migrate
+      && if [ \"$${RUN_SEED_ON_START:-false}\" = \"true\" ]; then npm run db:seed; fi
+      && node dist/server.js"
+    env_file:
+      - ${ENV_FILE:-.env.prod}
+    environment:
+      PORT: ${BACKEND_PORT:-3000}
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

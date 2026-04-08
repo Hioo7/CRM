@@ -37,17 +37,21 @@ export function CustomerDetailPage() {
 
   const customer = selectedCustomer;
   const accesses = customer.customerAccesses ?? [];
+  const isAdminUser = employee.role === 'ADMIN' || employee.role === 'SUPER_ADMIN';
+  const leadsBasePath = isAdminUser ? '/admin/dashboard/leads' : '/employee/dashboard/leads';
   const isOwner = customer.createdById === employee.id;
   const myAccess = accesses.find((a) => a.employeeId === employee.id);
-  const canWrite = isOwner || myAccess?.accessType === 'READ_WRITE';
+  const canWrite = isAdminUser || isOwner || myAccess?.accessType === 'READ_WRITE';
 
-  const accessLabel = isOwner
+  const accessLabel = isAdminUser
+    ? 'Admin'
+    : isOwner
     ? 'Owner'
     : myAccess
     ? ACCESS_TYPE_LABELS[myAccess.accessType]
     : 'View Only';
 
-  const accessBadgeClass = isOwner
+  const accessBadgeClass = isAdminUser || isOwner
     ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
     : canWrite
     ? 'border-amber-200 bg-amber-50 text-amber-800'
@@ -76,7 +80,7 @@ export function CustomerDetailPage() {
           <div className="flex items-start gap-3">
             <button
               className="btn btn-sm mt-0.5 rounded-2xl border border-stone-200 bg-white text-slate-700 shadow-none hover:bg-stone-50"
-              onClick={() => navigate('/employee/dashboard/leads')}
+              onClick={() => navigate(leadsBasePath)}
               aria-label="Back to leads"
             >
               <HiOutlineArrowLeft className="h-4 w-4" />

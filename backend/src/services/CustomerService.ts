@@ -67,9 +67,14 @@ export class CustomerService {
     });
   }
 
-  async findAll(employeeId: string, role: Role): Promise<CustomerListItem[]> {
+  async findAll(
+    employeeId: string,
+    role: Role,
+    createdById?: string,
+  ): Promise<CustomerListItem[]> {
     if (role === Role.ADMIN || role === Role.SUPER_ADMIN) {
       return prisma.customer.findMany({
+        where: createdById ? { createdById } : undefined,
         orderBy: { createdAt: 'desc' },
         include: customerListInclude,
       });

@@ -15,9 +15,12 @@ interface CreateOpportunityRequest {
 }
 
 export const opportunityService = {
-  async list(customerId?: string): Promise<OpportunityListItem[]> {
+  async list(customerId?: string, createdById?: string): Promise<OpportunityListItem[]> {
+    const params: Record<string, string> = {};
+    if (customerId) params['customerId'] = customerId;
+    if (createdById) params['createdById'] = createdById;
     const { data } = await httpClient.get<OpportunityListItem[]>('/opportunities', {
-      params: customerId ? { customerId } : undefined,
+      params: Object.keys(params).length > 0 ? params : undefined,
     });
     return data;
   },

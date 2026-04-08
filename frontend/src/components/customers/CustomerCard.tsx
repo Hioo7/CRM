@@ -2,10 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { HiOutlinePhone, HiOutlineChevronRight } from 'react-icons/hi2';
 import { ACCESS_TYPE_LABELS } from '@/config/constants';
 import type { CustomerListItem } from '@/types/customer';
+import type { Role } from '@/types/auth';
 
 interface CustomerCardProps {
   customer: CustomerListItem;
   currentEmployeeId: string;
+  detailBasePath: string;
+  viewerRole?: Role;
 }
 
 function getInitials(firstName: string | null, lastName: string | null): string {
@@ -14,13 +17,15 @@ function getInitials(firstName: string | null, lastName: string | null): string 
   return (f + l).toUpperCase() || '?';
 }
 
-function getAccessLabel(customer: CustomerListItem, currentEmployeeId: string): string {
+function getAccessLabel(customer: CustomerListItem, currentEmployeeId: string, viewerRole?: Role): string {
+  if (viewerRole === 'ADMIN' || viewerRole === 'SUPER_ADMIN') return 'Admin Access';
   if (customer.createdById === currentEmployeeId) return 'Owner';
   const access = (customer.customerAccesses ?? []).find((a) => a.employeeId === currentEmployeeId);
   return access ? ACCESS_TYPE_LABELS[access.accessType] : 'Read Only';
 }
 
 function getAccessBadgeClass(label: string): string {
+  if (label === 'Admin Access') return 'border-sky-200 bg-sky-50 text-sky-800';
   if (label === 'Owner') return 'border-emerald-200 bg-emerald-50 text-emerald-800';
   if (label === ACCESS_TYPE_LABELS.READ_WRITE) return 'border-amber-200 bg-amber-50 text-amber-800';
   return 'border-stone-200 bg-stone-100 text-slate-700';
@@ -31,11 +36,11 @@ function getSourcedByText(customer: CustomerListItem, currentEmployeeId: string)
   return `Sourced by ${customer.createdBy?.username ?? 'unknown'}`;
 }
 
-export function CustomerCard({ customer, currentEmployeeId }: CustomerCardProps) {
+export function CustomerCard({ customer, currentEmployeeId, detailBasePath, viewerRole }: CustomerCardProps) {
   const navigate = useNavigate();
   const fullName = [customer.firstName, customer.lastName].filter(Boolean).join(' ') || 'Unnamed';
   const initials = getInitials(customer.firstName, customer.lastName);
-  const accessLabel = getAccessLabel(customer, currentEmployeeId);
+  const accessLabel = getAccessLabel(customer, currentEmployeeId, viewerRole);
   const badgeClass = getAccessBadgeClass(accessLabel);
   const sourcedBy = getSourcedByText(customer, currentEmployeeId);
   const hasPhone = Boolean(customer.phone);
@@ -45,7 +50,7 @@ export function CustomerCard({ customer, currentEmployeeId }: CustomerCardProps)
   };
 
   const handleDetails = (): void => {
-    navigate(`/employee/dashboard/leads/${customer.id}`);
+    navigate(`${detailBasePath}/${customer.id}`);
   };
 
   return (
