@@ -24,9 +24,7 @@ services:
     env_file:
       - ${ENV_FILE:-.env.prod}
     environment:
-      PORT: ${BACKEND_PORT:-3000}
-    ports:
-      - "${BACKEND_PORT:-3000}:3000"
+      PORT: 3000
     depends_on:
       postgres:
         condition: service_healthy

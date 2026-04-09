@@ -5,7 +5,7 @@ export const ERROR_DISPLAY_DURATION_MS = 5000;
 export const AUTH_TOKEN_KEY = "crm_auth_token";
 
 /** Base URL for all API requests. */
-export const API_BASE_URL = "http://localhost:3000/api";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
 /** Roles a super admin or admin can assign when creating/editing an employee. */
 export const MANAGEABLE_ROLES: Array<"ADMIN" | "EMPLOYEE"> = [
