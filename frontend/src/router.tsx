@@ -18,6 +18,7 @@ import { EmployeeDetailPage } from '@/pages/admin/dashboard/EmployeeDetailPage';
 import { AdminLeadsPage } from '@/pages/admin/dashboard/AdminLeadsPage';
 import { AdminOpportunitiesPage } from '@/pages/admin/dashboard/AdminOpportunitiesPage';
 import { QuickMessagesPage } from '@/pages/shared/QuickMessagesPage';
+import { CardScanPage } from '@/pages/shared/CardScanPage';
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ export const router = createBrowserRouter([
             element: <AdminLeadsPage />,
           },
           {
+            path: 'card-scan',
+            element: <CardScanPage />,
+          },
+          {
             path: 'leads/:customerId',
             element: <CustomerDetailPage />,
           },
@@ -124,6 +129,10 @@ export const router = createBrowserRouter([
           {
             path: 'leads',
             element: <LeadsPage />,
+          },
+          {
+            path: 'card-scan',
+            element: <CardScanPage />,
           },
           {
             path: 'opportunities',

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { HiOutlineUserPlus } from 'react-icons/hi2';
+import { HiOutlineUserPlus, HiOutlineCamera } from 'react-icons/hi2';
 import { useCustomers } from '@/hooks/useCustomers';
 import { useAuth } from '@/hooks/useAuth';
 import { useModalState } from '@/hooks/useModalState';
@@ -56,13 +56,22 @@ export function LeadsPage() {
               </p>
             ) : null}
           </div>
-          <button
-            className="btn shrink-0 rounded-2xl border-0 bg-emerald-600 text-white shadow-[0_10px_24px_rgba(5,150,105,0.24)] hover:bg-emerald-700"
-            onClick={createModal.open}
-          >
-            <HiOutlineUserPlus className="h-5 w-5" />
-            <span className="hidden sm:inline">New Customer</span>
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              className="btn btn-circle border-0 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 shadow-none"
+              onClick={() => navigate('/employee/dashboard/card-scan')}
+              title="Scan Business Card"
+            >
+              <HiOutlineCamera className="h-5 w-5" />
+            </button>
+            <button
+              className="btn rounded-2xl border-0 bg-emerald-600 text-white shadow-[0_10px_24px_rgba(5,150,105,0.24)] hover:bg-emerald-700"
+              onClick={createModal.open}
+            >
+              <HiOutlineUserPlus className="h-5 w-5" />
+              <span className="hidden sm:inline">New Customer</span>
+            </button>
+          </div>
         </div>
       </section>
 

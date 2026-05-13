@@ -53,6 +53,7 @@ export function CreateEmployeeModal({ isOpen, onClose }: CreateEmployeeModalProp
       handleClose();
     } catch (err) {
       showError(extractApiErrorMessage(err as Error));
+    } finally {
       setIsSubmitting(false);
     }
   };

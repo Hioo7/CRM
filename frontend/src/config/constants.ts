@@ -7,6 +7,9 @@ export const AUTH_TOKEN_KEY = "crm_auth_token";
 /** Base URL for all API requests. */
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
+/** External business card OCR API endpoint. */
+export const CARD_SCAN_API_URL = import.meta.env.VITE_CARD_SCAN_API_URL || "/ocr/extract";
+
 /** Roles a super admin or admin can assign when creating/editing an employee. */
 export const MANAGEABLE_ROLES: Array<"ADMIN" | "EMPLOYEE"> = [
   "ADMIN",

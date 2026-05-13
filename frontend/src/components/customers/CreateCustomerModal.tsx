@@ -10,6 +10,7 @@ interface CreateCustomerModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (payload: CreateCustomerPayload) => Promise<void>;
+  initialValues?: Partial<CreateCustomerPayload>;
 }
 
 const EMPTY_FORM: CreateCustomerPayload = {
@@ -20,9 +21,11 @@ const EMPTY_FORM: CreateCustomerPayload = {
   phone: '',
 };
 
-export function CreateCustomerModal({ isOpen, onClose, onSubmit }: CreateCustomerModalProps) {
+export function CreateCustomerModal({ isOpen, onClose, onSubmit, initialValues }: CreateCustomerModalProps) {
   const banner = useErrorBanner();
-  const [form, setForm] = useState<CreateCustomerPayload>(EMPTY_FORM);
+  const [form, setForm] = useState<CreateCustomerPayload>(
+    initialValues ? { ...EMPTY_FORM, ...initialValues } : EMPTY_FORM,
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;

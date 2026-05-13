@@ -42,6 +42,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
         navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [],
       },
       devOptions: {
@@ -54,4 +55,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // server: {
+  //   proxy: {
+  //     '/api': 'http://localhost:3000',
+  //   },
+  // },
 })
